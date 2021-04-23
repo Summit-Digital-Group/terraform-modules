@@ -6,13 +6,9 @@ Features:
 - Logging
     - Saved to encrypted S3
     - Automatic archival and purging of log files
-- Lambda@theEdge Compatible
+- Lambda@Edge Compatible
 - IAM
     - All accounts created with least privileges
-
-## Requirements
-
-No requirements.
 
 ## Providers
 
