@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   dynamic "default_cache_behavior" {
     for_each = [var.default_cache]
     content {
-      allowed_methods  = try(default_cache_behavior.value["allowed_methods"], ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"])
+      allowed_methods  = try(default_cache_behavior.value["allowed_methods"], ["GET", "HEAD", "OPTIONS"])
       cached_methods   = try(default_cache_behavior.value["cached_methods"], ["GET", "HEAD"])
       target_origin_id = random_pet.origin_id.id
       dynamic "forwarded_values" {
@@ -140,7 +140,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
         for_each = try(default_cache_behavior.value["lambda_function_association"], [])
         content {
           event_type   = lambda_function_association.value.event_type
-          include_body = lookup(lambda_function_association.value, "include_body", null)
+          include_body = lambda_function_association.value.include_body
           lambda_arn   = lambda_function_association.value.lambda_arn
         }
       }

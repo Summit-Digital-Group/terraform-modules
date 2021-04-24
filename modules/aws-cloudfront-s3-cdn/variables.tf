@@ -16,16 +16,15 @@ variable "logging" {
     include_cookies = false
   }
 }
-
-variable "tags" {
-  description = "Tags to apply to all resources being generated"
-  default     = {}
-}
-
 variable "default_root_object" {
   type        = string
   default     = "index.html"
   description = "Object that CloudFront return when requests the root URL"
+}
+
+variable "tags" {
+  description = "Tags to apply to all resources being generated"
+  default     = {}
 }
 
 variable "default_tags" {
@@ -37,7 +36,7 @@ variable "default_tags" {
 variable "default_cache" {
   description = ""
   default = {
-    allowed_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
     cached_methods  = ["GET", "HEAD"]
     forwarded_values = [{
       query_string = false
@@ -45,7 +44,7 @@ variable "default_cache" {
         forward = "none"
       }]
     }]
-    viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
