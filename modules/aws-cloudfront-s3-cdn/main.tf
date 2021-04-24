@@ -80,25 +80,13 @@ resource "aws_s3_bucket" "origin" {
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "origin" {
-  count                   = var.block_origin_public_access_enabled ? 1 : 0
-  bucket                  = local.bucket_name
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-  # Don't ty and modify this bucket in two ways at the same time, S3 API will
-  # complain.
-  depends_on = [aws_s3_bucket_policy.default]
-}
-
 data "aws_s3_bucket" "origin" {
   depends_on = [aws_s3_bucket.origin]
   bucket     = local.bucket_name
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "Terraform Managed"
+  comment = "Terraform Managed - ${local.bucket_name}"
 }
 
 module "s3_logging_bucket" {
@@ -136,12 +124,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       cached_methods   = try(default_cache_behavior.value["cached_methods"], ["GET", "HEAD"])
       target_origin_id = random_pet.origin_id.id
       dynamic "forwarded_values" {
-        for_each = default_cache_behavior.value["forwarded_values"]
+        for_each = try(default_cache_behavior.value["forwarded_values"], [])
         content {
           query_string = forwarded_values.value["query_string"] != null ? forwarded_values.value["query_string"] : false
           headers      = try(forwarded_values.value["headers"], [])
           dynamic "cookies" {
-            for_each = forwarded_values.value["cookies"]
+            for_each = try(forwarded_values.value["cookies"], [])
             content {
               forward = cookies.value["forward"] != null ? cookies.value["forward"] : "none"
             }
@@ -156,10 +144,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
           lambda_arn   = lambda_function_association.value.lambda_arn
         }
       }
-      viewer_protocol_policy = default_cache_behavior.value["viewer_protocol_policy"] != null ? default_cache_behavior.value["viewer_protocol_policy"] : "allow-all"
-      min_ttl                = default_cache_behavior.value["min_ttl"] != null ? default_cache_behavior.value["min_ttl"] : 0
-      default_ttl            = default_cache_behavior.value["default_ttl"] != null ? default_cache_behavior.value["default_ttl"] : 3600
-      max_ttl                = default_cache_behavior.value["min_ttl"] != null ? default_cache_behavior.value["default_ttl"] : 86400
+      viewer_protocol_policy = try(default_cache_behavior.value["viewer_protocol_policy"], "allow-all")
+      min_ttl                = try(default_cache_behavior.value["min_ttl"], 0)
+      default_ttl            = try(default_cache_behavior.value["default_ttl"], 3600)
+      max_ttl                = try(default_cache_behavior.value["min_ttl"], 86400)
     }
   }
   price_class = var.price_class

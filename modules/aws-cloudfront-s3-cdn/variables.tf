@@ -31,7 +31,6 @@ variable "default_root_object" {
 variable "default_tags" {
   description = "Tags to apply to all resources being generated"
   default = {
-    private = true
   }
 }
 
@@ -148,19 +147,12 @@ variable "price_class" {
 variable "acm_certificate_arn" {
   type        = string
   description = "Existing ACM Certificate ARN"
-  default     = ""
 }
 
 variable "minimum_protocol_version" {
   type        = string
   description = "Cloudfront TLS minimum protocol version. See [Supported protocols and ciphers between viewers and CloudFront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers) for more information."
   default     = "TLSv1.2_2019"
-}
-
-variable "block_origin_public_access_enabled" {
-  type        = bool
-  default     = false
-  description = "When set to 'true' the s3 origin bucket will have public access block enabled"
 }
 
 variable "index_document" {
@@ -182,7 +174,7 @@ variable "redirect_all_requests_to" {
 
 variable "error_document" {
   type        = string
-  default     = "error.html"
+  default     = ""
   description = "An absolute path to the document to return in case of a 4XX error"
 }
 
@@ -201,7 +193,7 @@ variable "origin_path" {
 
 variable "log_standard_transition_days" {
   type        = number
-  description = "Number of days to persist in the standard storage tier before moving to the glacier tier"
+  description = "Number of days to persist in the standard storage tier before moving to the infrequent access tier"
   default     = 30
 }
 
@@ -213,14 +205,8 @@ variable "log_glacier_transition_days" {
 
 variable "log_expiration_days" {
   type        = number
-  description = "Number of days after which to expunge the objects"
-  default     = 90
-}
-
-variable "expiration_days" {
-  type        = number
-  default     = 90
-  description = "Number of days after which to expunge the objects"
+  description = "Number of days after which to expunge the objects from glacier storage"
+  default     = 365
 }
 
 variable "log_force_destroy" {
