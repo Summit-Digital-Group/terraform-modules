@@ -75,7 +75,7 @@ resource "aws_lambda_function" "this" {
   function_name    = local.lambda_name
   role             = aws_iam_role.this.arn
   handler          = "index.handler"
-  source_code_hash = filebase64sha256(data.archive_file.lambda_function.output_path)
+  source_code_hash = data.archive_file.lambda_function.output_base64sha256
   runtime          = "nodejs12.x"
   publish          = true
   tags             = local.tags
