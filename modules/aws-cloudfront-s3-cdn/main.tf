@@ -80,6 +80,11 @@ resource "aws_s3_bucket" "origin" {
   }
 }
 
+resource "aws_kms_key" "this" {
+  description             = "Used to encrypt s3 bucket: ${local.bucket_name}"
+  deletion_window_in_days = 10
+}
+
 data "aws_s3_bucket" "origin" {
   depends_on = [aws_s3_bucket.origin]
   bucket     = local.bucket_name
@@ -100,6 +105,7 @@ module "s3_logging_bucket" {
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [aws_s3_bucket.origin, module.s3_logging_bucket]
+  tags       = local.tags
   origin {
     domain_name = data.aws_s3_bucket.origin.bucket_regional_domain_name
     origin_id   = random_pet.origin_id.id
@@ -157,7 +163,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       locations        = var.geo_restriction_locations
     }
   }
-  tags = local.tags
   viewer_certificate {
     acm_certificate_arn            = var.acm_certificate_arn
     ssl_support_method             = var.acm_certificate_arn == "" ? "" : "sni-only"

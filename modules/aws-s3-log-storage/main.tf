@@ -1,3 +1,8 @@
+resource "aws_kms_key" "this" {
+  description             = "Used to encrypt s3 bucket: ${local.bucket_name}"
+  deletion_window_in_days = 10
+}
+
 resource "aws_s3_bucket" "default" {
   #bridgecrew:skip=BC_AWS_S3_13:Skipping `Enable S3 Bucket Logging` check until bridgecrew will support dynamic blocks (https://github.com/bridgecrewio/checkov/issues/776).
   #bridgecrew:skip=CKV_AWS_52:Skipping `Ensure S3 bucket has MFA delete enabled` due to issue in terraform (https://github.com/hashicorp/terraform-provider-aws/issues/629).
@@ -53,12 +58,11 @@ resource "aws_s3_bucket" "default" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm     = var.sse_algorithm
-        kms_master_key_id = var.kms_master_key_arn
+        kms_master_key_id = aws_kms_key.this.arn
+        sse_algorithm     = "aws:kms"
       }
     }
   }
-
   tags = local.tags
 }
 
