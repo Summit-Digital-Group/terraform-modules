@@ -88,7 +88,6 @@ resource "aws_kms_key" "this" {
 data "aws_s3_bucket" "origin" {
   depends_on = [aws_s3_bucket.origin]
   bucket     = local.bucket_name
-
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
