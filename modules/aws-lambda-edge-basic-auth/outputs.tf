@@ -16,7 +16,7 @@ output "qualified_arn" {
 }
 
 output "event_type" {
-  value = "viewer-response"
+  value = "viewer-request"
 }
 
 output "include_body" {
