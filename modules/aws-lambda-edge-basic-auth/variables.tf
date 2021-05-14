@@ -37,5 +37,5 @@ variable "password" {
 
 variable "realm" {
   description = "The name of the realm to associate with this auth lambda"
-  default     = "Fortitude Realm"
+  default     = "Realm"
 }
