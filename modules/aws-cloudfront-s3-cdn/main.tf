@@ -178,6 +178,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   dynamic "ordered_cache_behavior" {
     for_each = var.ordered_cache_behavior
     content {
+      path_pattern     = try(ordered_cache_behavior.value["path_pattern"], ["/"])
       allowed_methods  = try(ordered_cache_behavior.value["allowed_methods"], ["GET", "HEAD", "OPTIONS"])
       cached_methods   = try(ordered_cache_behavior.value["cached_methods"], ["GET", "HEAD"])
       target_origin_id = random_pet.origin_id.id
