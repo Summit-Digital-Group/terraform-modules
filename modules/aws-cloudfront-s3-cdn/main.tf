@@ -106,13 +106,7 @@ module "s3_logging_bucket" {
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [aws_s3_bucket.origin, module.s3_logging_bucket]
   tags       = local.tags
-  origin {
-    domain_name = data.aws_s3_bucket.origin.bucket_regional_domain_name
-    origin_id   = random_pet.origin_id.id
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
-    }
-  }
+
   dynamic "origin" {
     for_each = var.origins
     content {
@@ -130,7 +124,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
         }
       }
     }
-
+  }
+  origin {
+    domain_name = data.aws_s3_bucket.origin.bucket_regional_domain_name
+    origin_id   = random_pet.origin_id.id
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
+    }
   }
   enabled             = true
   is_ipv6_enabled     = true
@@ -193,6 +193,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
               forward = cookies.value["forward"] != null ? cookies.value["forward"] : "none"
             }
           }
+        }
+      }
+      dynamic "function_association" {
+        for_each = try(ordered_cache_behavior.value["function_association"], [])
+        content {
+          event_type   = function_association.value.event_type
+          function_arn = function_association.value.lambda_arn
         }
       }
       dynamic "lambda_function_association" {
