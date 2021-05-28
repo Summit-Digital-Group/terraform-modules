@@ -229,4 +229,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     minimum_protocol_version       = var.minimum_protocol_version
     cloudfront_default_certificate = var.acm_certificate_arn == "" ? true : false
   }
+  dynamic "custom_error_response" {
+    for_each = var.custom_error_responses
+    content {
+      error_code         = custom_error_respons.value.error_code
+      response_code      = custom_error_respons.value.response_code
+      response_page_path = custom_error_respons.value.response_page_path
+    }
+  }
 }
