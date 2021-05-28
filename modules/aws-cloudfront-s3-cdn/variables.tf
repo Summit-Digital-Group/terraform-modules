@@ -50,9 +50,14 @@ variable "default_cache" {
     max_ttl                = 86400
   }
 }
+variable "ordered_cache_behavior" {
+  description = ""
+  default     = null
+}
 
 variable "origins" {
   description = "One or more origins for this distribution (multiples allowed)."
+  default     = null
 }
 
 variable "geo_restriction_type" {

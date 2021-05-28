@@ -175,6 +175,39 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       max_ttl                = try(default_cache_behavior.value["min_ttl"], 86400)
     }
   }
+  dynamic "ordered_cache_behavior" {
+    for_each = var.ordered_cache_behavior
+    content {
+      allowed_methods  = try(ordered_cache_behavior.value["allowed_methods"], ["GET", "HEAD", "OPTIONS"])
+      cached_methods   = try(ordered_cache_behavior.value["cached_methods"], ["GET", "HEAD"])
+      target_origin_id = random_pet.origin_id.id
+      dynamic "forwarded_values" {
+        for_each = try(ordered_cache_behavior.value["forwarded_values"], [])
+        content {
+          query_string = forwarded_values.value["query_string"] != null ? forwarded_values.value["query_string"] : false
+          headers      = try(forwarded_values.value["headers"], [])
+          dynamic "cookies" {
+            for_each = try(forwarded_values.value["cookies"], [])
+            content {
+              forward = cookies.value["forward"] != null ? cookies.value["forward"] : "none"
+            }
+          }
+        }
+      }
+      dynamic "lambda_function_association" {
+        for_each = try(ordered_cache_behavior.value["lambda_function_association"], [])
+        content {
+          event_type   = lambda_function_association.value.event_type
+          include_body = lambda_function_association.value.include_body
+          lambda_arn   = lambda_function_association.value.lambda_arn
+        }
+      }
+      viewer_protocol_policy = try(ordered_cache_behavior.value["viewer_protocol_policy"], "allow-all")
+      min_ttl                = try(ordered_cache_behavior.value["min_ttl"], 0)
+      default_ttl            = try(ordered_cache_behavior.value["default_ttl"], 3600)
+      max_ttl                = try(ordered_cache_behavior.value["min_ttl"], 86400)
+    }
+  }
   price_class = var.price_class
   restrictions {
     geo_restriction {
