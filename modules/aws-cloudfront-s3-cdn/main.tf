@@ -232,9 +232,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   dynamic "custom_error_response" {
     for_each = var.custom_error_responses
     content {
-      error_code         = custom_error_respons.value.error_code
-      response_code      = custom_error_respons.value.response_code
-      response_page_path = custom_error_respons.value.response_page_path
+      error_code         = custom_error_response.value.error_code
+      response_code      = custom_error_response.value.response_code
+      response_page_path = custom_error_response.value.response_page_path
     }
   }
 }
