@@ -113,6 +113,25 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
     }
   }
+  dynamic "origin" {
+    for_each = var.origins
+    content {
+      domain_name = origin.value.domain_name
+      origin_id   = origin.value.origin_id
+      dynamic "custom_origin_config" {
+        for_each = origin.value.custom_origin_config
+        content {
+          http_port                = custom_origin_config.value.http_port
+          https_port               = custom_origin_config.value.https_port
+          origin_protocol_policy   = custom_origin_config.value.origin_protocol_policy
+          origin_ssl_protocols     = custom_origin_config.value.origin_ssl_protocols
+          origin_keepalive_timeout = custom_origin_config.value.origin_keepalive_timeout
+          origin_read_timeout      = custom_origin_config.value.origin_read_timeout
+        }
+      }
+    }
+
+  }
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "Terraform Managed"

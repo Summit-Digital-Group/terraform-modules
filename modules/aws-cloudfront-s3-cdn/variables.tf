@@ -51,6 +51,10 @@ variable "default_cache" {
   }
 }
 
+variable "origins" {
+  description = "One or more origins for this distribution (multiples allowed)."
+}
+
 variable "geo_restriction_type" {
   type = string
   # e.g. "whitelist"
