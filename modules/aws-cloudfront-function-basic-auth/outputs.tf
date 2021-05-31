@@ -2,10 +2,6 @@ output "arn" {
   value = aws_cloudfront_function.this.arn
 }
 
-output "qualified_arn" {
-  value = aws_cloudfront_function.this.qualified_arn
-}
-
 output "event_type" {
   value = "viewer-request"
 }
