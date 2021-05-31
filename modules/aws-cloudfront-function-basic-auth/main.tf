@@ -3,7 +3,7 @@ resource "random_password" "this" {
 }
 
 resource "aws_cloudfront_function" "this" {
-  name    = var.function_name
+  name    = local.function_name
   runtime = "cloudfront-js-1.0"
   comment = "basic_authentication"
   publish = true
