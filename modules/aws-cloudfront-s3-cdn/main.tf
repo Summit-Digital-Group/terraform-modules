@@ -199,7 +199,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
         for_each = try(ordered_cache_behavior.value["function_association"], [])
         content {
           event_type   = function_association.value.event_type
-          function_arn = function_association.value.lambda_arn
+          function_arn = function_association.value.function_arn
         }
       }
       dynamic "lambda_function_association" {
@@ -228,5 +228,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     ssl_support_method             = var.acm_certificate_arn == "" ? "" : "sni-only"
     minimum_protocol_version       = var.minimum_protocol_version
     cloudfront_default_certificate = var.acm_certificate_arn == "" ? true : false
+  }
+  dynamic "custom_error_response" {
+    for_each = var.custom_error_responses
+    content {
+      error_code         = custom_error_response.value.error_code
+      response_code      = custom_error_response.value.response_code
+      response_page_path = custom_error_response.value.response_page_path
+    }
   }
 }

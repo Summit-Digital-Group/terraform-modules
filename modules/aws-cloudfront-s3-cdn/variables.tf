@@ -191,7 +191,10 @@ variable "routing_rules" {
   default     = ""
   description = "A json array containing routing rules describing redirect behavior and when redirects are applied"
 }
-
+variable "custom_error_responses" {
+  description = "Customized error responses can be defined for any HTTP status code designated as an error condition - that is, any 4xx or 5xx status. "
+  default     = []
+}
 variable "origin_path" {
   # http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginPath
   type        = string
