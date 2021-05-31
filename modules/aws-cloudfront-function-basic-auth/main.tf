@@ -3,9 +3,9 @@ resource "random_password" "this" {
 }
 
 resource "aws_cloudfront_function" "this" {
-  name    = "redirect-to-prod-api"
+  name    = var.function_name
   runtime = "cloudfront-js-1.0"
-  comment = "redirect_api_to_target"
+  comment = "basic_authentication"
   publish = true
   code    = <<EOF
  var unauthorizedResponse = {

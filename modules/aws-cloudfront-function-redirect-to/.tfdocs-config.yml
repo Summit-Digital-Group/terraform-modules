@@ -1,0 +1,6 @@
+
+header-from: .header.md
+footer-from: ""
+sections:
+  hide:
+    - requirements
