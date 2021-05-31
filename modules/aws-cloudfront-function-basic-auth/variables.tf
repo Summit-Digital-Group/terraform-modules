@@ -1,7 +1,7 @@
 
 variable "function_name" {
   description = "Default lambda name after the prexi."
-  default     = "basic-auth"
+  default     = ""
 }
 
 variable "tags" {
