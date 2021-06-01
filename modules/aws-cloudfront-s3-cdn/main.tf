@@ -161,6 +161,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
           }
         }
       }
+      dynamic "function_association" {
+        for_each = try(default_cache_behavior.value["function_association"], [])
+        content {
+          event_type   = function_association.value.event_type
+          function_arn = function_association.value.function_arn
+        }
+      }
       dynamic "lambda_function_association" {
         for_each = try(default_cache_behavior.value["lambda_function_association"], [])
         content {
