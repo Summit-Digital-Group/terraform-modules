@@ -189,7 +189,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       path_pattern     = try(ordered_cache_behavior.value["path_pattern"], ["/"])
       allowed_methods  = try(ordered_cache_behavior.value["allowed_methods"], ["GET", "HEAD", "OPTIONS"])
       cached_methods   = try(ordered_cache_behavior.value["cached_methods"], ["GET", "HEAD"])
-      target_origin_id = random_pet.origin_id.id
+      target_origin_id = ordered_cache_behavior.value["target_origin_id"]
       dynamic "forwarded_values" {
         for_each = try(ordered_cache_behavior.value["forwarded_values"], [])
         content {
