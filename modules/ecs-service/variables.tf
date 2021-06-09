@@ -1,3 +1,7 @@
+variable "ecs_cluster_id" {
+  description = "The cluster to add this service to."
+}
+
 variable "container_port" {
   description = "The port to map incoming traffic to on the container"
 }
