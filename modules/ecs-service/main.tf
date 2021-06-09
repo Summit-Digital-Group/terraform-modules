@@ -19,10 +19,6 @@ module "this_container_def" {
   }
 }
 
-data "aws_ecs_cluster" "this" {
-  cluster_name = var.aws_ecs_cluster_name
-}
-
 resource "aws_ecs_task_definition" "this" {
   execution_role_arn       = aws_iam_role.ecs.arn
   task_role_arn            = aws_iam_role.ecs.arn
@@ -45,7 +41,7 @@ resource "aws_ecs_service" "this" {
     ignore_changes = [desired_count]
   }
   name                               = local.name_prefix
-  cluster                            = data.aws_ecs_cluster.this.id
+  cluster                            = var.ecs_cluster_id
   task_definition                    = aws_ecs_task_definition.this.arn
   launch_type                        = "FARGATE"
   desired_count                      = 3
