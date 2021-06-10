@@ -177,7 +177,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
           lambda_arn   = lambda_function_association.value.lambda_arn
         }
       }
-      viewer_protocol_policy = try(default_cache_behavior.value["viewer_protocol_policy"], "allow-all")
+      viewer_protocol_policy = try(default_cache_behavior.value["viewer_protocol_policy"], "redirect-to-https")
       min_ttl                = try(default_cache_behavior.value["min_ttl"], 0)
       default_ttl            = try(default_cache_behavior.value["default_ttl"], 3600)
       max_ttl                = try(default_cache_behavior.value["min_ttl"], 86400)
@@ -218,7 +218,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
           lambda_arn   = lambda_function_association.value.lambda_arn
         }
       }
-      viewer_protocol_policy = try(ordered_cache_behavior.value["viewer_protocol_policy"], "allow-all")
+      viewer_protocol_policy = try(ordered_cache_behavior.value["viewer_protocol_policy"], "redirect-to-https")
       min_ttl                = try(ordered_cache_behavior.value["min_ttl"], 0)
       default_ttl            = try(ordered_cache_behavior.value["default_ttl"], 3600)
       max_ttl                = try(ordered_cache_behavior.value["min_ttl"], 86400)
