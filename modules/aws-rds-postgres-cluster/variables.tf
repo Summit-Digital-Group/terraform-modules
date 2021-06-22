@@ -57,3 +57,8 @@ variable "database_name" {
 variable "tags" {
   default = {}
 }
+
+variable "storage_encrypted" {
+  description = "Specifies whether the DB cluster is encrypted."
+  default     = true
+}

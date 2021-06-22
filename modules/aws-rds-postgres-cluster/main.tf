@@ -31,6 +31,7 @@ resource "aws_rds_cluster" "this" {
   master_password         = local.password
   backup_retention_period = var.backup_retention_period
   preferred_backup_window = var.preferred_backup_window
+  storage_encrypted       = var.storage_encrypted
 }
 
 resource "aws_rds_cluster_instance" "this" {
