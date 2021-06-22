@@ -62,3 +62,23 @@ variable "storage_encrypted" {
   description = "Specifies whether the DB cluster is encrypted."
   default     = true
 }
+
+variable "monitoring_role_arn" {
+  description = "The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. Docs: http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html"
+  default     = null
+}
+
+variable "monitoring_interval" {
+  description = "The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60."
+  default     = 5
+}
+
+variable "performance_insights_enabled" {
+  description = "Specifies whether Performance Insights is enabled or not."
+  default     = true
+}
+
+variable "performance_insights_kms_key_id" {
+  description = " The ARN for the KMS key to encrypt Performance Insights data. When specifying performance_insights_kms_key_id, performance_insights_enabled needs to be set to true."
+  default     = null
+}

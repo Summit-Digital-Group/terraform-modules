@@ -38,13 +38,17 @@ resource "aws_rds_cluster_instance" "this" {
   lifecycle {
     ignore_changes = [engine_version]
   }
-  publicly_accessible = var.publicly_accessible
-  count               = var.instances
-  identifier          = "${var.cluster_identifier}-${count.index}"
-  cluster_identifier  = aws_rds_cluster.this.id
-  instance_class      = var.instance_class
-  engine              = aws_rds_cluster.this.engine
-  engine_version      = aws_rds_cluster.this.engine_version
+  publicly_accessible             = var.publicly_accessible
+  count                           = var.instances
+  identifier                      = "${var.cluster_identifier}-${count.index}"
+  cluster_identifier              = aws_rds_cluster.this.id
+  instance_class                  = var.instance_class
+  engine                          = aws_rds_cluster.this.engine
+  engine_version                  = aws_rds_cluster.this.engine_version
+  performance_insights_enabled    = var.performance_insights_enabled
+  performance_insights_kms_key_id = var.performance_insights_kms_key_id
+  monitoring_interval             = var.monitoring_interval
+  monitoring_role_arn             = var.monitoring_role_arn
 }
 
 resource "random_password" "this" {
