@@ -25,6 +25,7 @@ resource "aws_security_group" "this" {
 resource "aws_rds_cluster" "this" {
   cluster_identifier      = var.cluster_identifier
   engine                  = "aurora-postgresql"
+  engine_version          = "12.6"
   availability_zones      = var.availability_zones
   database_name           = var.database_name
   master_username         = local.username
