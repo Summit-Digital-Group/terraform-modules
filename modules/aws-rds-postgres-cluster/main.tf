@@ -33,6 +33,7 @@ resource "aws_rds_cluster" "this" {
   backup_retention_period = var.backup_retention_period
   preferred_backup_window = var.preferred_backup_window
   storage_encrypted       = var.storage_encrypted
+  final_snapshot_identifier = "${var.database_name}-finalsnapshot"
 }
 
 resource "aws_rds_cluster_instance" "this" {
