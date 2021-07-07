@@ -19,6 +19,13 @@ resource "aws_security_group" "this" {
     to_port     = 5432
     cidr_blocks = var.vpc_cidrs
   }
+
+  egress {
+    from_port = 0
+    protocol = "tcp"
+    to_port = 65535
+    cidr_blocks = var.vpc_cidrs
+  }
   tags = var.tags
 }
 
