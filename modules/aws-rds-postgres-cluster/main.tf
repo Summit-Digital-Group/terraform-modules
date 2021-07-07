@@ -34,6 +34,7 @@ resource "aws_rds_cluster" "this" {
   preferred_backup_window = var.preferred_backup_window
   storage_encrypted       = var.storage_encrypted
   final_snapshot_identifier = "${var.database_name}-finalsnapshot"
+  db_subnet_group_name = aws_db_subnet_group.this.name
 
   lifecycle {
     ignore_changes = [
@@ -57,6 +58,7 @@ resource "aws_rds_cluster_instance" "this" {
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
   monitoring_interval             = var.monitoring_interval
   monitoring_role_arn             = var.monitoring_role_arn
+  db_subnet_group_name = aws_db_subnet_group.this.name
 }
 
 resource "random_password" "this" {
