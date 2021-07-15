@@ -94,17 +94,30 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
   comment = "Terraform Managed - ${local.bucket_name}"
 }
 
-module "s3_logging_bucket" {
-  source                   = "../aws-s3-log-storage"
-  bucket_name              = local.logging_bucket_name
-  standard_transition_days = var.log_standard_transition_days
-  glacier_transition_days  = var.log_glacier_transition_days
-  expiration_days          = var.log_expiration_days
-  force_destroy            = var.log_force_destroy
+resource "aws_s3_bucket" "logs" {
+  bucket = local.logging_bucket_name
+  acl = "log-delivery-write"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "aws:kms"
+      }
+    }
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "logs" {
+  bucket = aws_s3_bucket.logs.id
+
+  block_public_acls = true
+  ignore_public_acls = true
+  restrict_public_buckets = true
+  block_public_policy = true
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
-  depends_on = [aws_s3_bucket.origin, module.s3_logging_bucket]
+  depends_on = [aws_s3_bucket.origin]
   tags       = local.tags
 
   dynamic "origin" {
@@ -138,7 +151,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   default_root_object = var.default_root_object
   logging_config {
     include_cookies = var.logging.include_cookies
-    bucket          = module.s3_logging_bucket.bucket.bucket_regional_domain_name
+    bucket          = aws_s3_bucket.logs.bucket_domain_name
     prefix          = var.logging.prefix
   }
   aliases = var.aliases
