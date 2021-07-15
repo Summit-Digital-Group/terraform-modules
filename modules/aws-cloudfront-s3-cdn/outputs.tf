@@ -3,7 +3,7 @@ output "s3_bucket" {
 }
 
 output "s3_bucket_logging" {
-  value = module.s3_logging_bucket.bucket
+  value = aws_s3_bucket.logs.bucket
 }
 
 output "aws_cloudfront_distribution" {
