@@ -103,7 +103,7 @@ resource "aws_iam_role" "ecs" {
 
 resource "aws_iam_role_policy" "ecs" {
   role   = aws_iam_role.ecs.id
-  policy = data.aws_iam_policy_document.ecs_role.json
+  policy = data.aws_iam_policy_document.ecs_task_role.json
 
 }
 
