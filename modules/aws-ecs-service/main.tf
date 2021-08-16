@@ -43,7 +43,7 @@ resource "aws_ecs_service" "this" {
   cluster                            = var.ecs_cluster_id
   task_definition                    = aws_ecs_task_definition.this.arn
   launch_type                        = "FARGATE"
-  desired_count                      = 3
+  desired_count                      = var.container_count
   deployment_maximum_percent         = 100
   deployment_minimum_healthy_percent = 10
   deployment_circuit_breaker {
