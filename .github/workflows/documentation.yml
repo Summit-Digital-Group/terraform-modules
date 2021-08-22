@@ -14,5 +14,6 @@ jobs:
         with:
           find-dir: ./modules
           output-file: README.md
+          output-method: replace
           config-file: .terraform-docs.yml
           git-push: 'true'
