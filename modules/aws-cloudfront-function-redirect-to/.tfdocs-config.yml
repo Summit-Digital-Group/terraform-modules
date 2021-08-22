@@ -1,4 +1,4 @@
-
+formatter: markdown
 header-from: .header.md
 footer-from: ""
 sections:
