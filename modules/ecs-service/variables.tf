@@ -91,3 +91,33 @@ variable "force_new_deployment" {
   description = "Enable to force a new task deployment of the service. This can be used to update tasks to use a newer Docker image with same image/tag combination"
   default     = false
 }
+
+variable "container_count" {
+  description = "Number of instances of the task definition to place and keep running."
+  default     = 3
+}
+
+variable "deployment_maximum_percent" {
+  description = "Upper limit (as a percentage of the service's desiredCount) of the number of running tasks that can be running in a service during a deployment."
+  default     = 100
+}
+
+variable "deployment_minimum_healthy_percent" {
+  description = "Lower limit (as a percentage of the service's desiredCount) of the number of running tasks that must remain running and healthy in a service during a deployment."
+  default     = 10
+}
+
+variable "launch_type" {
+  description = "Launch type on which to run your service. The valid values are EC2, FARGATE, and EXTERNAL."
+  default     = "FARGATE"
+}
+
+variable "assign_public_ip" {
+  description = "Assign a public IP address to the ENI (Fargate launch type only). Valid values are true or false. Default true."
+  default     = true
+}
+
+variable "requires_compatibilities" {
+  description = "Set of launch types required by the task. The valid values are EC2 and FARGATE."
+  default     = ["FARGATE"]
+}
