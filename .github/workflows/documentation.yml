@@ -15,5 +15,4 @@ jobs:
           output-file: README.md
           output-method: replace
           config-file: .tfdocs-config.yml
-          template: ''
           git-push: 'true'
