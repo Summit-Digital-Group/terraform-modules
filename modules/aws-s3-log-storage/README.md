@@ -1,4 +1,6 @@
-# aws-s3-log-storage
+## Requirements
+
+No requirements.
 
 ## Providers
 
@@ -44,4 +46,3 @@
 | Name | Description |
 |------|-------------|
 | bucket | n/a |
-

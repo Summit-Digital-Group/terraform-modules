@@ -1,14 +1,6 @@
-# aws-cloudfront-s3-cdn
+## Requirements
 
-This module will configure a cloudfront endpoint being served from s3 using best practices and common configurations.
-
-Features:
-- Logging
-    - Saved to encrypted S3
-    - Automatic archival and purging of log files
-- Lambda@Edge Compatible
-- IAM
-    - All accounts created with least privileges
+No requirements.
 
 ## Providers
 
@@ -40,4 +32,3 @@ Features:
 | lambda\_arn | n/a |
 | name | n/a |
 | qualified\_arn | n/a |
-
