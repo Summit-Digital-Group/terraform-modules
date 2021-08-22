@@ -1,14 +1,6 @@
-# aws-cloudfront-s3-cdn
+## Requirements
 
-This module will configure a cloudfront endpoint being served from s3 using best practices and common configurations.
-
-Features:
-- Logging
-    - Saved to encrypted S3
-    - Automatic archival and purging of log files
-- Lambda@Edge Compatible
-- IAM
-    - All accounts created with least privileges
+No requirements.
 
 ## Providers
 
@@ -32,6 +24,7 @@ Features:
 | cors\_allowed\_origins | List of allowed origins (e.g. example.com, test.com) for S3 bucket | `list(string)` | `[]` | no |
 | cors\_expose\_headers | List of expose header in the response for S3 bucket | `list(string)` | <pre>[<br>  "ETag"<br>]</pre> | no |
 | cors\_max\_age\_seconds | Time in seconds that browser can cache the response for S3 bucket | `number` | `3600` | no |
+| custom\_error\_responses | Customized error responses can be defined for any HTTP status code designated as an error condition - that is, any 4xx or 5xx status. | `list` | `[]` | no |
 | custom\_origin\_headers | A list of origin header parameters that will be sent to origin | `list(object({ name = string, value = string }))` | `[]` | no |
 | default\_cache | n/a | `map` | <pre>{<br>  "allowed_methods": [<br>    "GET",<br>    "HEAD",<br>    "OPTIONS"<br>  ],<br>  "cached_methods": [<br>    "GET",<br>    "HEAD"<br>  ],<br>  "default_ttl": 3600,<br>  "forwarded_values": [<br>    {<br>      "cookies": [<br>        {<br>          "forward": "none"<br>        }<br>      ],<br>      "query_string": false<br>    }<br>  ],<br>  "max_ttl": 86400,<br>  "min_ttl": 0,<br>  "viewer_protocol_policy": "redirect-to-https"<br>}</pre> | no |
 | default\_root\_object | Object that CloudFront return when requests the root URL | `string` | `"index.html"` | no |
@@ -47,9 +40,11 @@ Features:
 | log\_versioning\_enabled | When true, the access logs bucket will be versioned | `bool` | `false` | no |
 | logging | The Amazon S3 bucket to save logs into | `map` | <pre>{<br>  "bucket_name": "",<br>  "include_cookies": false,<br>  "prefix": ""<br>}</pre> | no |
 | minimum\_protocol\_version | Cloudfront TLS minimum protocol version. See [Supported protocols and ciphers between viewers and CloudFront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers) for more information. | `string` | `"TLSv1.2_2019"` | no |
+| ordered\_cache\_behavior | n/a | `any` | `null` | no |
 | origin\_force\_destroy | Delete all objects from the bucket so that the bucket can be destroyed without error (e.g. `true` or `false`) | `bool` | `false` | no |
 | origin\_path | An optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin. It must begin with a /. Do not add a / at the end of the path. | `string` | `""` | no |
 | origin\_ssl\_protocols | The SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS. | `list(string)` | <pre>[<br>  "TLSv1",<br>  "TLSv1.1",<br>  "TLSv1.2"<br>]</pre> | no |
+| origins | One or more origins for this distribution (multiples allowed). | `any` | `null` | no |
 | price\_class | Price class for this distribution: `PriceClass_All`, `PriceClass_200`, `PriceClass_100` | `string` | `"PriceClass_100"` | no |
 | redirect\_all\_requests\_to | A hostname to redirect all website requests for this distribution to. If this is set, it overrides other website settings | `string` | `""` | no |
 | routing\_rules | A json array containing routing rules describing redirect behavior and when redirects are applied | `string` | `""` | no |
@@ -60,6 +55,8 @@ Features:
 
 | Name | Description |
 |------|-------------|
+| aws\_cloudfront\_distribution | n/a |
+| aws\_cloudfront\_origin\_access\_identity | n/a |
+| aws\_kms\_key | n/a |
 | s3\_bucket | n/a |
 | s3\_bucket\_logging | n/a |
-

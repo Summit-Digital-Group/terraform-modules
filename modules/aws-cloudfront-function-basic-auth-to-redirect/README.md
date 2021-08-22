@@ -6,21 +6,21 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| archive | n/a |
 | aws | n/a |
 | random | n/a |
+| time | n/a |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | default\_tags | Tags to apply to all resources being generated | `map` | `{}` | no |
-| lambda\_name | Default lambda name after the prexi. | `string` | `"basic-auth"` | no |
-| name\_prefix | Prefix to be used when creating the lambda and iam roles associated with it. Defaults to random pet name. | `string` | `""` | no |
+| function\_name | Default lambda name after the prexi. | `string` | `""` | no |
 | password | The password to use when authenticating. If left blank a password will be generated automatically. | `string` | `""` | no |
+| path | Has to match this path to be redirected to target | `string` | `"/"` | no |
 | realm | The name of the realm to associate with this auth lambda | `string` | `"Realm"` | no |
-| retention\_in\_days | Number of days to retain lambda logs in cloudwatch | `number` | `30` | no |
 | tags | Tags to apply to all resources being generated | `map` | `{}` | no |
+| target | The full url to redirect to on path match. Example: https://www.example.com | `any` | n/a | yes |
 | username | The name to use when authenticating | `string` | n/a | yes |
 
 ## Outputs
@@ -29,10 +29,7 @@ No requirements.
 |------|-------------|
 | arn | n/a |
 | event\_type | n/a |
+| function\_arn | n/a |
 | include\_body | n/a |
-| lambda | n/a |
-| lambda\_arn | n/a |
-| name | n/a |
 | password | n/a |
-| qualified\_arn | n/a |
 | username | n/a |
