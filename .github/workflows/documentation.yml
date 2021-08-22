@@ -5,6 +5,27 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
+      - name: Set Status to Pending
+        uses: niteoweb/pull_request_status_action@v1.0.0
+        with:
+          # Pull Request number (Mandatory)
+          pr_number: 32
+
+          # State to apply (Mandatory)
+          # Any of the (error | failure | pending | success) states
+          state: pending
+
+          # Name of the repository in {organization}/{repo_name} format (Mandatory)
+          repository: Summit-Digital-Group/terraform-modules
+          # Name to identify the Status (Optional)
+          # Defaults to `default`
+          context: default
+          # A short description of the status (Optional)
+          description: "Generating Terraform Documentation"
+
+        env:
+          # Default Github Token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -17,3 +38,47 @@ jobs:
           output-method: replace
           config-file: .tfdocs-config.yml
           git-push: 'true'
+      - name: Set Status to Success
+        if: ${{ success() }}
+        uses: niteoweb/pull_request_status_action@v1.0.0
+        with:
+          # Pull Request number (Mandatory)
+          pr_number: 32
+
+          # State to apply (Mandatory)
+          # Any of the (error | failure | pending | success) states
+          state: success
+
+          # Name of the repository in {organization}/{repo_name} format (Mandatory)
+          repository: Summit-Digital-Group/terraform-modules
+          # Name to identify the Status (Optional)
+          # Defaults to `default`
+          context: default
+          # A short description of the status (Optional)
+          description: "Generating Terraform Documentation"
+
+        env:
+          # Default Github Token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set Status to Error
+        if: ${{ failure() }}
+        uses: niteoweb/pull_request_status_action@v1.0.0
+        with:
+          # Pull Request number (Mandatory)
+          pr_number: 32
+
+          # State to apply (Mandatory)
+          # Any of the (error | failure | pending | success) states
+          state: error
+
+          # Name of the repository in {organization}/{repo_name} format (Mandatory)
+          repository: Summit-Digital-Group/terraform-modules
+          # Name to identify the Status (Optional)
+          # Defaults to `default`
+          context: default
+          # A short description of the status (Optional)
+          description: "Failed to generate terraform docs for this PR."
+
+        env:
+          # Default Github Token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
