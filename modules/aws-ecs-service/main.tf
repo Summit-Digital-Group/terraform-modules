@@ -23,7 +23,7 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn       = aws_iam_role.ecs.arn
   task_role_arn            = aws_iam_role.ecs.arn
   family                   = local.name_prefix
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = var.requires_compatibilities
   network_mode             = "awsvpc"
   cpu                      = var.cpu
   memory                   = var.memory
@@ -42,10 +42,10 @@ resource "aws_ecs_service" "this" {
   name                               = local.name_prefix
   cluster                            = var.ecs_cluster_id
   task_definition                    = aws_ecs_task_definition.this.arn
-  launch_type                        = "FARGATE"
+  launch_type                        = var.launch_type
   desired_count                      = var.container_count
-  deployment_maximum_percent         = 100
-  deployment_minimum_healthy_percent = 10
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
   deployment_circuit_breaker {
     enable   = true
     rollback = true
@@ -59,7 +59,7 @@ resource "aws_ecs_service" "this" {
   }
   network_configuration {
     subnets          = var.subnets
-    assign_public_ip = true
+    assign_public_ip = var.assign_public_ip
     security_groups  = [aws_security_group.this.id]
   }
 }

@@ -21,27 +21,27 @@ resource "aws_security_group" "this" {
   }
 
   egress {
-    from_port = 0
-    protocol = "tcp"
-    to_port = 65535
+    from_port   = 0
+    protocol    = "tcp"
+    to_port     = 65535
     cidr_blocks = var.vpc_cidrs
   }
   tags = var.tags
 }
 
 resource "aws_rds_cluster" "this" {
-  cluster_identifier      = var.cluster_identifier
-  engine                  = "aurora-postgresql"
-  engine_version          = "12.6"
-  availability_zones      = var.availability_zones
-  database_name           = var.database_name
-  master_username         = local.username
-  master_password         = local.password
-  backup_retention_period = var.backup_retention_period
-  preferred_backup_window = var.preferred_backup_window
-  storage_encrypted       = var.storage_encrypted
+  cluster_identifier        = var.cluster_identifier
+  engine                    = "aurora-postgresql"
+  engine_version            = "12.6"
+  availability_zones        = var.availability_zones
+  database_name             = var.database_name
+  master_username           = local.username
+  master_password           = local.password
+  backup_retention_period   = var.backup_retention_period
+  preferred_backup_window   = var.preferred_backup_window
+  storage_encrypted         = var.storage_encrypted
   final_snapshot_identifier = "${var.database_name}-finalsnapshot"
-  db_subnet_group_name = aws_db_subnet_group.this.name
+  db_subnet_group_name      = aws_db_subnet_group.this.name
 
   lifecycle {
     ignore_changes = [
@@ -65,7 +65,7 @@ resource "aws_rds_cluster_instance" "this" {
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
   monitoring_interval             = var.monitoring_interval
   monitoring_role_arn             = var.monitoring_role_arn
-  db_subnet_group_name = aws_db_subnet_group.this.name
+  db_subnet_group_name            = aws_db_subnet_group.this.name
 }
 
 resource "random_password" "this" {

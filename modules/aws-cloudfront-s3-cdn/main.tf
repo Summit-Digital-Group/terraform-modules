@@ -96,7 +96,7 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 
 resource "aws_s3_bucket" "logs" {
   bucket = local.logging_bucket_name
-  acl = "log-delivery-write"
+  acl    = "log-delivery-write"
 
   server_side_encryption_configuration {
     rule {
@@ -110,10 +110,10 @@ resource "aws_s3_bucket" "logs" {
 resource "aws_s3_bucket_public_access_block" "logs" {
   bucket = aws_s3_bucket.logs.id
 
-  block_public_acls = true
-  ignore_public_acls = true
+  block_public_acls       = true
+  ignore_public_acls      = true
   restrict_public_buckets = true
-  block_public_policy = true
+  block_public_policy     = true
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
