@@ -15,5 +15,6 @@ jobs:
           output-file: README.md
           output-method: replace
           config-file: .tfdocs-config.yml
-          template: <!--- BEGIN_TF_DOCS ---><br><!--- END_TF_DOCS ---><br>
+          template: |
+            <br><br><!--- BEGIN\_TF\_DOCS ---><br><!--- END\_TF\_DOCS ---><br>
           git-push: 'true'
