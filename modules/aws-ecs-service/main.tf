@@ -1,20 +1,22 @@
 module "this_container_def" {
   source                       = "cloudposse/ecs-container-definition/aws"
-  version                      = "0.56.0"
   container_name               = var.container_name
   container_image              = var.container_image
-  readonly_root_filesystem     = true
+  readonly_root_filesystem     = var.readonly_root_filesystem
   environment                  = var.environment_vars
   secrets                      = var.secrets
   port_mappings                = [{ containerPort : var.container_port, hostPort : local.host_port, protocol : "tcp" }]
   container_cpu                = var.cpu
   container_memory_reservation = var.memory
-  log_configuration = {
-    "logDriver" = "awslogs",
-    "options" : {
-      "awslogs-region"        = var.region
-      "awslogs-group"         = var.awslogs_group
-      "awslogs-stream-prefix" = local.awslogs_prefix
+  dynamic "log_configuration" {
+    for_each = var.logging_enabled ? [1] : []
+    content {
+      logDriver = "awslogs"
+      options = {
+        "awslogs-region"        = var.region
+        "awslogs-group"         = var.awslogs_group
+        "awslogs-stream-prefix" = local.awslogs_prefix
+      }
     }
   }
 }
