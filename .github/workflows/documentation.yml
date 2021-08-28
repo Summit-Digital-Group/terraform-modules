@@ -16,3 +16,6 @@ jobs:
           output-method: replace
           config-file: .tfdocs-config.yml
           git-push: 'true'
+          template: |
+            <!--- BEGIN_TF_DOCS --->
+            <!--- END_TF_DOCS --->
