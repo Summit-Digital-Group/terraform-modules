@@ -168,3 +168,8 @@ variable "load_balancer_container_port" {
   description = "When provided will override the default container_port"
   default     = ""
 }
+
+variable "enable_execute_command" {
+  description = "Specifies whether to enable Amazon ECS Exec for the tasks within the service."
+  default     = false
+}
