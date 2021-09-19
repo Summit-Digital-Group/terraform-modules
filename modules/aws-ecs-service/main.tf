@@ -8,17 +8,14 @@ module "this_container_def" {
   port_mappings                = [{ containerPort : var.container_port, hostPort : local.host_port, protocol : "tcp" }]
   container_cpu                = var.cpu
   container_memory_reservation = var.memory
-  dynamic "log_configuration" {
-    for_each = var.logging_enabled ? [1] : []
-    content {
-      logDriver = "awslogs"
-      options = {
-        "awslogs-region"        = var.region
-        "awslogs-group"         = var.awslogs_group
-        "awslogs-stream-prefix" = local.awslogs_prefix
-      }
+  log_configuration = var.logging_enabled ? {
+    logDriver = "awslogs"
+    options = {
+      "awslogs-region"        = var.region
+      "awslogs-group"         = var.awslogs_group
+      "awslogs-stream-prefix" = local.awslogs_prefix
     }
-  }
+  } : null
 }
 
 resource "aws_ecs_task_definition" "this" {
