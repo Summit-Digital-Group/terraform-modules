@@ -1,5 +1,3 @@
-# Usage
-
 <!--- BEGIN_TF_DOCS --->
 # aws-lambda-edge-basic-auth
 
@@ -64,4 +62,3 @@ No modules.
 | <a name="output_username"></a> [username](#output\_username) | n/a |
 
 <!--- END_TF_DOCS --->
-

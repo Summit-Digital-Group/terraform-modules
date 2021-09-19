@@ -1,5 +1,3 @@
-# Usage
-
 <!--- BEGIN_TF_DOCS --->
 # aws-cloudfront-function-basic-auth
 
@@ -40,4 +38,3 @@ No modules.
 | <a name="output_include_body"></a> [include\_body](#output\_include\_body) | n/a |
 
 <!--- END_TF_DOCS --->
-
