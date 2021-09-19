@@ -120,18 +120,26 @@ resource "aws_s3_bucket" "logs" {
 }
 
 resource "aws_s3_bucket_public_access_block" "logs" {
-  bucket = aws_s3_bucket.logs.id
-
+  bucket                  = aws_s3_bucket.logs.id
   block_public_acls       = var.block_public_acls
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
   block_public_policy     = var.block_public_policy
 }
 
+resource "aws_s3_bucket_public_access_block" "block_origin_public_access" {
+  count                   = var.aws_s3_origin_block_public_access ? 1 : 0
+  bucket                  = aws_s3_bucket.origin.id
+  block_public_acls       = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+  block_public_policy     = true
+}
+
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [aws_s3_bucket.origin]
   tags       = local.tags
-
+  web_acl_id = var.web_acl_id
   dynamic "origin" {
     for_each = var.origins
     content {
@@ -161,10 +169,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   is_ipv6_enabled     = true
   comment             = "Terraform Managed"
   default_root_object = var.default_root_object
-  logging_config {
-    include_cookies = var.logging.include_cookies
-    bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = var.logging.prefix
+  dynamic "logging_config" {
+    for_each = var.logging.bucket_name != "" ? [1] : []
+    content {
+      include_cookies = var.logging.include_cookies
+      bucket          = aws_s3_bucket.logs.bucket_domain_name
+      prefix          = var.logging.prefix
+    }
   }
   aliases = var.aliases
   dynamic "default_cache_behavior" {

@@ -33,7 +33,10 @@ variable "default_tags" {
   default = {
   }
 }
-
+variable "aws_s3_origin_block_public_access" {
+  description = "Blocks all public access to the origin bucket"
+  default     = false
+}
 variable "default_cache" {
   description = ""
   default = {
@@ -264,4 +267,9 @@ variable "ignore_public_acls" {
 variable "block_public_policy" {
   description = "Whether Amazon S3 should block public bucket policies for this bucket. Defaults to true. Enabling this setting does not affect the existing bucket policy."
   default     = true
+}
+
+variable "web_acl_id" {
+  description = "A unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution. To specify a web ACL created using the latest version of AWS WAF (WAFv2), use the ACL ARN, for example aws_wafv2_web_acl.example.arn. To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example aws_waf_web_acl.example.id. The WAF Web ACL must exist in the WAF Global (CloudFront) region and the credentials configuring this argument must have waf:GetWebACL permissions assigned."
+  default     = null
 }
