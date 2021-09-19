@@ -138,3 +138,33 @@ variable "readonly_root_filesystem" {
   description = "Determines whether a container is given read-only access to its root filesystem. Due to how Terraform type casts booleans in json it is required to double quote this value	"
   default     = true
 }
+
+variable "sidecar_enabled" {
+  default = false
+}
+
+variable "container_sidecar_def" {
+  //  type = object({
+  //    container_name  = string
+  //    container_image = string
+  //    //    readonly_root_filesystem = string
+  //    //    environment_vars = list(object({}))
+  //    //    secrets          = list(object({name=string, valueFrom=string}))
+  //    container_port = number
+  //    host_port      = number
+  //    //    logging_enabled          = bool
+  //    //    awslogs_group            = string
+  //    //    awslogs_prefix           = string
+  //  })
+  default = null
+}
+
+variable "load_balancer_container_name" {
+  description = "When provided will override the default container_name"
+  default     = ""
+}
+
+variable "load_balancer_container_port" {
+  description = "When provided will override the default container_port"
+  default     = ""
+}
