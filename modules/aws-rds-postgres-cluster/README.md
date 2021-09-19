@@ -1,5 +1,3 @@
-# Usage
-
 <!--- BEGIN_TF_DOCS --->
 # aws-rds-postgres-cluster
 
@@ -59,4 +57,3 @@ No modules.
 | <a name="output_username"></a> [username](#output\_username) | n/a |
 
 <!--- END_TF_DOCS --->
-

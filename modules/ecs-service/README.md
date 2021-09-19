@@ -1,5 +1,3 @@
-# Usage
-
 <!--- BEGIN_TF_DOCS --->
 # ecs-service
 
@@ -72,4 +70,3 @@ This resource is designed to work optimally with fargate service tasks out of th
 | <a name="output_security_group"></a> [security\_group](#output\_security\_group) | n/a |
 
 <!--- END_TF_DOCS --->
-

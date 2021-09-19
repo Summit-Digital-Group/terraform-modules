@@ -18,20 +18,39 @@ module "this_container_def" {
   } : null
 }
 
+module "container_sidecar_defs" {
+  count                        = var.sidecar_enabled != false ? 1 : 0
+  source                       = "cloudposse/ecs-container-definition/aws"
+  container_name               = var.container_sidecar_def.container_name
+  container_image              = var.container_sidecar_def.container_image
+  readonly_root_filesystem     = try(var.container_sidecar_def.readonly_root_filesystem, true)
+  environment                  = try(var.container_sidecar_def.environment_vars, null)
+  secrets                      = try(var.container_sidecar_def.secrets, null)
+  port_mappings                = [{ containerPort : var.container_sidecar_def.container_port, hostPort : var.container_sidecar_def.host_port, protocol : "tcp" }]
+  container_cpu                = local.sidecar_cpu
+  container_memory_reservation = local.sidecar_memory
+  log_configuration = try(var.container_sidecar_def.logging_enabled, false) ? {
+    logDriver = "awslogs"
+    options = {
+      "awslogs-region"        = var.region
+      "awslogs-group"         = try(var.container_sidecar_def.awslogs_group, var.awslogs_group)
+      "awslogs-stream-prefix" = var.container_sidecar_def.awslogs_prefix
+    }
+  } : null
+}
+
 resource "aws_ecs_task_definition" "this" {
   execution_role_arn       = aws_iam_role.ecs.arn
   task_role_arn            = aws_iam_role.ecs.arn
   family                   = local.name_prefix
   requires_compatibilities = var.requires_compatibilities
   network_mode             = "awsvpc"
-  cpu                      = var.cpu
-  memory                   = var.memory
+  cpu                      = local.total_cpu
+  memory                   = local.total_memory
   tags                     = var.tags
   container_definitions    = <<EOF
-[
-  ${module.this_container_def.json_map_encoded}
-]
-EOF
+    [${module.this_container_def.json_map_encoded},${module.container_sidecar_defs[0].json_map_encoded}]
+  EOF
 }
 
 resource "aws_ecs_service" "this" {
@@ -52,8 +71,8 @@ resource "aws_ecs_service" "this" {
   force_new_deployment = var.force_new_deployment
   tags                 = var.tags
   load_balancer {
-    container_name   = var.container_name
-    container_port   = var.container_port
+    container_name   = var.load_balancer_container_name != "" ? var.load_balancer_container_name : var.container_name
+    container_port   = var.load_balancer_container_port != "" ? var.load_balancer_container_port : var.container_port
     target_group_arn = var.target_group_arn
   }
   network_configuration {

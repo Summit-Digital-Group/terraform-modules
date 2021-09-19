@@ -1,5 +1,3 @@
-# Usage
-
 <!--- BEGIN_TF_DOCS --->
 # aws-lambda-edge-cache-header
 
@@ -52,4 +50,3 @@ No modules.
 | <a name="output_qualified_arn"></a> [qualified\_arn](#output\_qualified\_arn) | n/a |
 
 <!--- END_TF_DOCS --->
-
