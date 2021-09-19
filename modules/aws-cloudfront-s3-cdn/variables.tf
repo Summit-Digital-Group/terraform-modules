@@ -16,6 +16,7 @@ variable "logging" {
     include_cookies = false
   }
 }
+
 variable "default_root_object" {
   type        = string
   default     = "index.html"
@@ -32,7 +33,10 @@ variable "default_tags" {
   default = {
   }
 }
-
+variable "aws_s3_origin_block_public_access" {
+  description = "Blocks all public access to the origin bucket"
+  default     = false
+}
 variable "default_cache" {
   description = ""
   default = {
@@ -50,6 +54,7 @@ variable "default_cache" {
     max_ttl                = 86400
   }
 }
+
 variable "ordered_cache_behavior" {
   description = ""
   default     = null
@@ -168,6 +173,7 @@ variable "index_document" {
   default     = "index.html"
   description = "Amazon S3 returns this index document when requests are made to the root domain or any of the subfolders"
 }
+
 variable "origin_ssl_protocols" {
   type        = list(string)
   default     = ["TLSv1", "TLSv1.1", "TLSv1.2"]
@@ -191,10 +197,12 @@ variable "routing_rules" {
   default     = ""
   description = "A json array containing routing rules describing redirect behavior and when redirects are applied"
 }
+
 variable "custom_error_responses" {
   description = "Customized error responses can be defined for any HTTP status code designated as an error condition - that is, any 4xx or 5xx status. "
   default     = []
 }
+
 variable "origin_path" {
   # http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginPath
   type        = string
@@ -224,4 +232,44 @@ variable "log_force_destroy" {
   type        = bool
   description = "Applies to log bucket created by this module only. If true, all objects will be deleted from the bucket on destroy, so that the bucket can be destroyed without error. These objects are not recoverable."
   default     = false
+}
+
+variable "enable_custom_kms_key_encryption" {
+  description = "Enable and provision kms key for s3 encryption"
+  default     = false
+}
+
+variable "kms_key_id" {
+  description = "Uses an already existing kms key for encrytping contents"
+  default     = ""
+}
+
+variable "kms_key_deletion_window_in_days" {
+  description = "Duration in days after which the key is deleted after destruction of the resource, must be between 7 and 30 days. Defaults to 10 days."
+  default     = 10
+}
+
+variable "block_public_acls" {
+  description = "Whether Amazon S3 should block public ACLs for this bucket."
+  default     = true
+}
+
+variable "restrict_public_buckets" {
+  description = " Whether Amazon S3 should restrict public bucket policies for this bucket. Defaults to true. Enabling this setting does not affect the previously stored bucket policy, except that public and cross-account access within the public bucket policy, including non-public delegation to specific accounts, is blocked"
+  default     = true
+}
+
+variable "ignore_public_acls" {
+  description = "Whether Amazon S3 should ignore public ACLs for this bucket. Defaults to true. Enabling this setting does not affect the persistence of any existing ACLs and doesn't prevent new public ACLs from being set."
+  default     = true
+}
+
+variable "block_public_policy" {
+  description = "Whether Amazon S3 should block public bucket policies for this bucket. Defaults to true. Enabling this setting does not affect the existing bucket policy."
+  default     = true
+}
+
+variable "web_acl_id" {
+  description = "A unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution. To specify a web ACL created using the latest version of AWS WAF (WAFv2), use the ACL ARN, for example aws_wafv2_web_acl.example.arn. To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example aws_waf_web_acl.example.id. The WAF Web ACL must exist in the WAF Global (CloudFront) region and the credentials configuring this argument must have waf:GetWebACL permissions assigned."
+  default     = null
 }

@@ -36,10 +36,12 @@ variable "region" {
 
 variable "awslogs_group" {
   description = "The name of the logs group to send log event to."
+  default     = ""
 }
 
 variable "awslogs_prefix" {
   description = "The prefix to use when sending log events to the logs group."
+  default     = ""
 }
 
 variable "aws_ecs_cluster_name" {
@@ -127,3 +129,12 @@ variable "network_mode" {
   default     = "awsvpc"
 }
 
+variable "logging_enabled" {
+  description = "This will enable awslogs. Docs: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LogConfiguration.html"
+  default     = true
+}
+
+variable "readonly_root_filesystem" {
+  description = "Determines whether a container is given read-only access to its root filesystem. Due to how Terraform type casts booleans in json it is required to double quote this value	"
+  default     = true
+}

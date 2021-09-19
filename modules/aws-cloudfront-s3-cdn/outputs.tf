@@ -15,5 +15,5 @@ output "aws_cloudfront_origin_access_identity" {
 }
 
 output "aws_kms_key" {
-  value = aws_kms_key.this
+  value = aws_kms_key.this[0]
 }
