@@ -126,7 +126,8 @@ data "aws_iam_policy_document" "ecs_role" {
       "ecr:DescribeImages",
       "ecr:BatchGetImage",
       "secretsmanager:GetSecretValue",
-      "ecs:StartTelemetrySession"
+      "ecs:StartTelemetrySession",
+      "S3:*"
     ]
   }
 }
