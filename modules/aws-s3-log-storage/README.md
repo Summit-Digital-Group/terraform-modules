@@ -1,5 +1,3 @@
-# Usage
-
 <!--- BEGIN_TF_DOCS --->
 # aws-s3-log-storage
 
@@ -62,4 +60,3 @@ No modules.
 | <a name="output_bucket"></a> [bucket](#output\_bucket) | n/a |
 
 <!--- END_TF_DOCS --->
-
