@@ -48,9 +48,7 @@ resource "aws_ecs_task_definition" "this" {
   cpu                      = local.total_cpu
   memory                   = local.total_memory
   tags                     = var.tags
-  container_definitions    = <<EOF
-    [${module.this_container_def.json_map_encoded},${module.container_sidecar_defs[0].json_map_encoded}]
-  EOF
+  container_definitions    = local.container_defs
 }
 
 resource "aws_ecs_service" "this" {
