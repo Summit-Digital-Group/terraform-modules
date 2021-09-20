@@ -6,11 +6,5 @@ locals {
   sidecar_memory = var.sidecar_enabled ? try(var.container_sidecar_def.memory, var.memory) : 0
   total_cpu      = var.cpu + local.sidecar_cpu
   total_memory   = var.memory + local.sidecar_memory
-  container_defs = var.sidecar_enabled ? local.with_sidecar : local.no_sidecar
-  with_sidecar   = <<EOF
-    [${module.this_container_def.json_map_encoded},${module.container_sidecar_defs[0].json_map_encoded}]
-  EOF
-  no_sidecar     = <<EOF
-    [${module.this_container_def.json_map_encoded}]
-  EOF
+  container_defs = var.sidecar_enabled ? "[${module.this_container_def.json_map_encoded},${module.container_sidecar_defs[0].json_map_encoded}]" : "[${module.this_container_def.json_map_encoded}]"
 }
