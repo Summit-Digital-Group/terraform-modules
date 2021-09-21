@@ -42,6 +42,7 @@ resource "aws_rds_cluster" "this" {
   storage_encrypted         = var.storage_encrypted
   final_snapshot_identifier = "${var.database_name}-finalsnapshot"
   db_subnet_group_name      = aws_db_subnet_group.this.name
+  vpc_security_group_ids = [aws_security_group.this.id]
 
   lifecycle {
     ignore_changes = [
