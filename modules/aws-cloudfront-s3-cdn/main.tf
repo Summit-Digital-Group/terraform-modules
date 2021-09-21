@@ -81,8 +81,9 @@ resource "aws_s3_bucket" "origin" {
 }
 
 resource "aws_kms_key" "this" {
+  count                   = (var.kms_key_id == "" || var.enable_custom_kms_key_encryption) ? 1 : 0
   description             = "Used to encrypt s3 bucket: ${local.bucket_name}"
-  deletion_window_in_days = 10
+  deletion_window_in_days = var.kms_key_deletion_window_in_days
 }
 
 data "aws_s3_bucket" "origin" {
@@ -100,16 +101,34 @@ resource "aws_s3_bucket" "logs" {
 
   server_side_encryption_configuration {
     rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "aws:kms"
+      dynamic "apply_server_side_encryption_by_default" {
+        for_each = (var.enable_custom_kms_key_encryption && var.kms_key_id == "") ? [] : ["using-default-kms-key-id"]
+        content {
+          sse_algorithm = "aws:kms"
+        }
+      }
+      dynamic "apply_server_side_encryption_by_default" {
+        for_each = (var.enable_custom_kms_key_encryption || var.kms_key_id != "") ? ["using-provisioned-or-provided-kms-key"] : []
+        content {
+          sse_algorithm     = "aws:kms"
+          kms_master_key_id = var.kms_key_id != "" ? var.kms_key_id : aws_kms_key.this[0].key_id
+        }
       }
     }
   }
 }
 
 resource "aws_s3_bucket_public_access_block" "logs" {
-  bucket = aws_s3_bucket.logs.id
+  bucket                  = aws_s3_bucket.logs.id
+  block_public_acls       = var.block_public_acls
+  ignore_public_acls      = var.ignore_public_acls
+  restrict_public_buckets = var.restrict_public_buckets
+  block_public_policy     = var.block_public_policy
+}
 
+resource "aws_s3_bucket_public_access_block" "block_origin_public_access" {
+  count                   = var.aws_s3_origin_block_public_access ? 1 : 0
+  bucket                  = aws_s3_bucket.origin.id
   block_public_acls       = true
   ignore_public_acls      = true
   restrict_public_buckets = true
@@ -119,7 +138,7 @@ resource "aws_s3_bucket_public_access_block" "logs" {
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [aws_s3_bucket.origin]
   tags       = local.tags
-
+  web_acl_id = var.web_acl_id
   dynamic "origin" {
     for_each = var.origins
     content {
@@ -149,10 +168,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   is_ipv6_enabled     = true
   comment             = "Terraform Managed"
   default_root_object = var.default_root_object
-  logging_config {
-    include_cookies = var.logging.include_cookies
-    bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = var.logging.prefix
+  dynamic "logging_config" {
+    for_each = var.logging.bucket_name != "" ? [1] : []
+    content {
+      include_cookies = var.logging.include_cookies
+      bucket          = aws_s3_bucket.logs.bucket_domain_name
+      prefix          = var.logging.prefix
+    }
   }
   aliases = var.aliases
   dynamic "default_cache_behavior" {

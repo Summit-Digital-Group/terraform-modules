@@ -36,10 +36,12 @@ variable "region" {
 
 variable "awslogs_group" {
   description = "The name of the logs group to send log event to."
+  default     = ""
 }
 
 variable "awslogs_prefix" {
   description = "The prefix to use when sending log events to the logs group."
+  default     = ""
 }
 
 variable "aws_ecs_cluster_name" {
@@ -127,3 +129,47 @@ variable "network_mode" {
   default     = "awsvpc"
 }
 
+variable "logging_enabled" {
+  description = "This will enable awslogs. Docs: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LogConfiguration.html"
+  default     = true
+}
+
+variable "readonly_root_filesystem" {
+  description = "Determines whether a container is given read-only access to its root filesystem. Due to how Terraform type casts booleans in json it is required to double quote this value	"
+  default     = true
+}
+
+variable "sidecar_enabled" {
+  default = false
+}
+
+variable "container_sidecar_def" {
+  //  type = object({
+  //    container_name  = string
+  //    container_image = string
+  //    //    readonly_root_filesystem = string
+  //    //    environment_vars = list(object({}))
+  //    //    secrets          = list(object({name=string, valueFrom=string}))
+  //    container_port = number
+  //    host_port      = number
+  //    //    logging_enabled          = bool
+  //    //    awslogs_group            = string
+  //    //    awslogs_prefix           = string
+  //  })
+  default = null
+}
+
+variable "load_balancer_container_name" {
+  description = "When provided will override the default container_name"
+  default     = ""
+}
+
+variable "load_balancer_container_port" {
+  description = "When provided will override the default container_port"
+  default     = ""
+}
+
+variable "enable_execute_command" {
+  description = "Specifies whether to enable Amazon ECS Exec for the tasks within the service."
+  default     = false
+}
