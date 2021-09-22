@@ -72,4 +72,8 @@ resource "aws_rds_cluster_instance" "this" {
 
 resource "random_password" "this" {
   length = 32
+  special = false
+  upper = true
+  lower = true
+  number = true
 }
