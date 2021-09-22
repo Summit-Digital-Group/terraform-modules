@@ -43,6 +43,7 @@ resource "aws_rds_cluster" "this" {
   final_snapshot_identifier = "${var.database_name}-finalsnapshot"
   db_subnet_group_name      = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.this.id]
+  iam_database_authentication_enabled = true
 
   lifecycle {
     ignore_changes = [

@@ -82,3 +82,8 @@ variable "performance_insights_kms_key_id" {
   description = " The ARN for the KMS key to encrypt Performance Insights data. When specifying performance_insights_kms_key_id, performance_insights_enabled needs to be set to true."
   default     = null
 }
+
+variable "iam_database_authentication_enabled" {
+  description = "Turn on IAM authentication for database access"
+  default = false
+}
