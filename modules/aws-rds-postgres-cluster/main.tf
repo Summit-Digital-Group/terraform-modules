@@ -44,6 +44,7 @@ resource "aws_rds_cluster" "this" {
   db_subnet_group_name      = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.this.id]
   iam_database_authentication_enabled = true
+  deletion_protection = true
 
   lifecycle {
     ignore_changes = [
