@@ -1,5 +1,5 @@
 
-data "aws_iam_policy_document" "origin" {
+data "aws_iam_policy_document" "origin_website" {
   statement {
     sid       = "S3GetObjectForCloudFront"
     actions   = ["s3:GetObject"]
@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "origin" {
     }
   }
 }
-#
+
 #data "aws_iam_policy_document" "origin_website" {
 #  statement {
 #    sid       = "S3GetObjectForCloudFront"
