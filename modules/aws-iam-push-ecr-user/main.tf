@@ -36,12 +36,12 @@ resource "aws_iam_policy" "ecr_login" {
 
 resource "aws_iam_user_policy_attachment" "ecr" {
   policy_arn = aws_iam_policy.ecr_deploy.arn
-  user       = aws_iam_user.api_deploy.name
+  user       = aws_iam_user.deploy.name
 }
 
 resource "aws_iam_user_policy_attachment" "ecr_login" {
   policy_arn = aws_iam_policy.ecr_login.arn
-  user       = aws_iam_user.api_deploy.name
+  user       = aws_iam_user.deploy.name
 }
 
 data "aws_iam_policy_document" "ecs" {
@@ -58,5 +58,5 @@ resource "aws_iam_policy" "ecs_redeploy" {
 
 resource "aws_iam_user_policy_attachment" "esc" {
   policy_arn = aws_iam_policy.ecs_redeploy.arn
-  user       = aws_iam_user.api_deploy.name
+  user       = aws_iam_user.deploy.name
 }
