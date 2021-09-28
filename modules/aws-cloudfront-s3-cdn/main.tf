@@ -1,5 +1,5 @@
 
-data "aws_iam_policy_document" "origin_website" {
+data "aws_iam_policy_document" "origin" {
   statement {
     sid       = "S3GetObjectForCloudFront"
     actions   = ["s3:GetObject"]
@@ -20,17 +20,17 @@ data "aws_iam_policy_document" "origin_website" {
   }
 }
 
-#data "aws_iam_policy_document" "origin_website" {
-#  statement {
-#    sid       = "S3GetObjectForCloudFront"
-#    actions   = ["s3:GetObject"]
-#    resources = ["arn:aws:s3:::${local.bucket_name}${local.origin_path}*"]
-#    principals {
-#      type        = "AWS"
-#      identifiers = ["*"]
-#    }
-#  }
-#}
+data "aws_iam_policy_document" "origin_website" {
+  statement {
+    sid       = "S3GetObjectForCloudFront"
+    actions   = ["s3:GetObject"]
+    resources = ["arn:aws:s3:::${local.bucket_name}${local.origin_path}*"]
+    principals {
+      type        = "AWS"
+      identifiers = [local.cloudfront_origin_access_identity_iam_arn]
+    }
+  }
+}
 
 resource "aws_s3_bucket_policy" "default" {
   bucket = join("", aws_s3_bucket.origin.*.bucket)
