@@ -177,3 +177,7 @@ variable "enable_execute_command" {
 variable "container_defs" {
   default = []
 }
+
+variable "use_passed_container" {
+  default = false
+}
