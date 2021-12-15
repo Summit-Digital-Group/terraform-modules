@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "ecr" {
       "ecr:CompleteLayerUpload",
       "ecr:PutImage"
     ]
-    resources = [var.ecr_arn]
+    resources = var.ecr_arn
   }
 }
 
